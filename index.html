@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input id="pwm" placeholder="PWM value" />
+    <button id="sendBtn">Send</button>
+    <button id="turnLeftBtn">Turn Left</button>
+    <button id="turnRightBtn">Turn Right</button>
+    <button id="stopBtn">Stop</button>
+
+    <br />
+
+    <script type="text/javascript">
+      const address = "192.168.1.223:8888/";
+      let ws = new WebSocket("ws://" + address);
+
+      const handleClick = btn => {
+        let valueToSend = parseInt(pwm.value);
+
+        switch (btn.target.id) {
+          case "turnLeftBtn":
+            valueToSend = "left";
+            break;
+          case "turnRightBtn":
+            valueToSend = "right";
+            break;
+          case "stopBtn":
+            valueToSend = "stop";
+        }
+        ws.send(valueToSend);
+      };
+
+      const pwm = document.querySelector("#pwm");
+      document.querySelector("#sendBtn").addEventListener("click", handleClick);
+      document
+        .querySelector("#turnLeftBtn")
+        .addEventListener("click", handleClick);
+      document
+        .querySelector("#turnRightBtn")
+        .addEventListener("click", handleClick);
+      document.querySelector("#stopBtn").addEventListener("click", handleClick);
+    </script>
+  </body>
+</html>
