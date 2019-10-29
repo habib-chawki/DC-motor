@@ -10,7 +10,7 @@ let board = new firmata.Board("/dev/ttyACM0", () => {
   board.pinMode(3, board.MODES.PWM);
 });
 
-fs.readFile("./index.html", (err, html) => {
+fs.readFile("./example08.html", (err, html) => {
   if (!err) {
     http
       .createServer((req, res) => {
@@ -26,23 +26,25 @@ fs.readFile("./index.html", (err, html) => {
   }
 });
 
+// board.on("ready", () => {
+//     board.digitalWrite(13, board.HIGH);
+//     setTimeout(() => {board.analogWrite(3, 100); console.log("Timeout triggered")}, 1000);
+
+// });
+
 wss.on("connection", ws => {
   ws.on("message", PMWValue => {
     switch (PMWValue) {
       case "left":
-        console.log("turn left");
-        board.digitalWrite(2, board.HIGH);
-        break;
-      case "right":
-        console.log("turn right");
         board.digitalWrite(2, board.LOW);
         break;
+      case "right":
+        board.digitalWrite(2, board.HIGH);
+        break;
       case "stop":
-        console.log("stop");
         board.analogWrite(3, 0);
         break;
       default:
-        console.log(PMWValue);
         board.analogWrite(3, PMWValue);
     }
   });
